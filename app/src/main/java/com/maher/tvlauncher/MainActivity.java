@@ -61,14 +61,16 @@ public class MainActivity extends Activity {
 
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.HORIZONTAL);
-        root.setBackground(new GradientDrawable(
-            GradientDrawable.Orientation.TL_BR,
-            new int[]{
-                Color.rgb(15, 15, 20),
-                Color.rgb(65, 10, 22),
-                Color.rgb(12, 15, 25)
-            }
-        ));
+        android.graphics.drawable.Drawable fondo =
+    android.graphics.drawable.Drawable.createFromStream(
+        getResources().openRawResource(
+            getResources().getIdentifier(
+                "fondo_chivas", "drawable", getPackageName()
+            )
+        ), null
+    );
+
+root.setBackground(fondo);
 
         LinearLayout menu = new LinearLayout(this);
         menu.setOrientation(LinearLayout.VERTICAL);
