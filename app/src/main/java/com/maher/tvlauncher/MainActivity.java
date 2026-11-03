@@ -92,7 +92,7 @@ public class MainActivity extends Activity {
             item.setTextColor(white);
             item.setTextSize(20);
             item.setFocusable(true);
-            item.setFocusableInTouchMode(true);0
+            item.setFocusableInTouchMode(true);
             item.setPadding(22, 17, 22, 17);
             GradientDrawable bg = new GradientDrawable();
             bg.setColor(Color.argb(55, 255, 255, 255));
