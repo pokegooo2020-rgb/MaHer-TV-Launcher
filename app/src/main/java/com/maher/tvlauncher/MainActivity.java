@@ -224,7 +224,7 @@ root.setBackground(fondo);
         scroll.addView(appList);
 
         content.addView(scroll,
-            new LinearLayout.LayoutParams(-1, 155));
+            new LinearLayout.LayoutParams(-1, 195));
 
         loadApps();
 
@@ -292,7 +292,7 @@ root.setBackground(fondo);
             LinearLayout card = new LinearLayout(this);
             card.setOrientation(LinearLayout.VERTICAL);
             card.setGravity(Gravity.CENTER);
-            card.setPadding(12, 12, 12, 12);
+            card.setPadding(18, 18, 18, 18);
             card.setBackground(panel(
                 Color.rgb(45, 45, 55), 18
             ));
@@ -305,7 +305,7 @@ root.setBackground(fondo);
             } catch (Exception ignored) {}
 
             card.addView(icon,
-                new LinearLayout.LayoutParams(65, 65));
+    new LinearLayout.LayoutParams(90, 90));
 
             TextView label = text(
                 info.loadLabel(pm).toString(), 14, white
@@ -316,7 +316,7 @@ root.setBackground(fondo);
             card.addView(label);
 
             LinearLayout.LayoutParams params =
-                new LinearLayout.LayoutParams(125, 140);
+                new LinearLayout.LayoutParams(175, 165);
             params.setMargins(0, 0, 15, 0);
             appList.addView(card, params);
 
