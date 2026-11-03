@@ -23,7 +23,9 @@ import java.util.LinkedHashMap;
 public class MainActivity extends Activity {
 
     private final int white = Color.WHITE;
-    private final int muted = Color.rgb(190, 200, 225);
+    private final int muted = Color.rgb(220, 220, 220);
+    private final int red = Color.rgb(190, 20, 45);
+    private LinearLayout content;
     private LinearLayout appList;
 
     @Override
@@ -39,10 +41,11 @@ public class MainActivity extends Activity {
         buildScreen();
     }
 
-    private GradientDrawable background(int color, int radius) {
+    private GradientDrawable panel(int color, int radius) {
         GradientDrawable bg = new GradientDrawable();
         bg.setColor(color);
         bg.setCornerRadius(radius);
+        bg.setStroke(2, Color.rgb(90, 90, 100));
         return bg;
     }
 
@@ -57,72 +60,159 @@ public class MainActivity extends Activity {
     private void buildScreen() {
 
         LinearLayout root = new LinearLayout(this);
-        root.setOrientation(LinearLayout.VERTICAL);
-        root.setPadding(55, 30, 45, 25);
-
+        root.setOrientation(LinearLayout.HORIZONTAL);
         root.setBackground(new GradientDrawable(
             GradientDrawable.Orientation.TL_BR,
             new int[]{
-                Color.rgb(8, 13, 35),
-                Color.rgb(31, 25, 75),
-                Color.rgb(10, 18, 43)
+                Color.rgb(15, 15, 20),
+                Color.rgb(65, 10, 22),
+                Color.rgb(12, 15, 25)
             }
         ));
 
-        TextView brand = text("MaHer TV", 38, white);
-        brand.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-        root.addView(brand);
+        LinearLayout menu = new LinearLayout(this);
+        menu.setOrientation(LinearLayout.VERTICAL);
+        menu.setPadding(22, 30, 18, 20);
+        menu.setBackgroundColor(Color.rgb(12, 13, 20));
 
-        TextView subtitle = text(
-            "TU ENTRETENIMIENTO, A TU MANERA",
-            13, muted
-        );
-        subtitle.setPadding(2, 5, 0, 8);
-        root.addView(subtitle);
+        TextView logo = text("MAHER", 27, white);
+        logo.setTypeface(null, Typeface.BOLD);
+        menu.addView(logo);
+
+        TextView team = text("TV  •  CHIVAS", 13, red);
+        team.setTypeface(null, Typeface.BOLD);
+        team.setPadding(0, 3, 0, 35);
+        menu.addView(team);
+
+        String[] options = {
+            "⌂   INICIO",
+            "▦   APLICACIONES",
+            "▶   PELÍCULAS",
+            "▣   SERIES",
+            "⚙   AJUSTES"
+        };
+
+        for (int i = 0; i < options.length; i++) {
+            final int index = i;
+            TextView item = text(options[i], 15, white);
+            item.setPadding(12, 17, 8, 17);
+            item.setFocusable(true);
+            item.setClickable(true);
+            item.setBackground(panel(
+                i == 0 ? red : Color.rgb(30, 31, 40), 12
+            ));
+
+            LinearLayout.LayoutParams p =
+                new LinearLayout.LayoutParams(-1, -2);
+            p.setMargins(0, 0, 0, 12);
+            menu.addView(item, p);
+
+            item.setOnFocusChangeListener((v, focused) -> {
+                v.setBackground(panel(
+                    focused || index == 0
+                    ? red : Color.rgb(30, 31, 40), 12
+                ));
+            });
+
+            item.setOnClickListener(v -> {
+                if (index == 1) {
+                    content.removeAllViews();
+                    showApplications();
+                } else if (index == 0) {
+                    content.removeAllViews();
+                    showHome();
+                } else {
+                    content.removeAllViews();
+                    TextView message = text(
+                        index == 2 ? "PELÍCULAS" :
+                        index == 3 ? "SERIES" : "AJUSTES",
+                        28, white
+                    );
+                    message.setPadding(20, 30, 0, 0);
+                    content.addView(message);
+                }
+            });
+        }
+
+        TextView bottom = text("¡VAMOS CHIVAS!", 13, white);
+        bottom.setTypeface(null, Typeface.BOLD);
+        bottom.setPadding(0, 30, 0, 0);
+        menu.addView(bottom);
+
+        root.addView(menu,
+            new LinearLayout.LayoutParams(205, -1));
+
+        content = new LinearLayout(this);
+        content.setOrientation(LinearLayout.VERTICAL);
+        content.setPadding(30, 25, 30, 20);
+
+        root.addView(content,
+            new LinearLayout.LayoutParams(0, -1, 1));
+
+        setContentView(root);
+        showHome();
+    }
+
+    private void showHome() {
 
         TextView clock = text(
             new SimpleDateFormat(
                 "EEEE, d MMMM   •   HH:mm",
                 new Locale("es", "MX")
             ).format(new Date()),
-            19, white
+            17, white
         );
-        root.addView(clock);
+        content.addView(clock);
+
+        TextView title = text("BIENVENIDO A MAHER TV", 30, white);
+        title.setTypeface(null, Typeface.BOLD);
+        title.setPadding(0, 25, 0, 5);
+        content.addView(title);
+
+        TextView subtitle = text(
+            "EL ORGULLO DE GUADALAJARA",
+            17, Color.rgb(255, 80, 100)
+        );
+        subtitle.setTypeface(null, Typeface.BOLD);
+        content.addView(subtitle);
 
         LinearLayout hero = new LinearLayout(this);
         hero.setOrientation(LinearLayout.VERTICAL);
         hero.setGravity(Gravity.CENTER_VERTICAL);
-        hero.setPadding(25, 15, 25, 15);
+        hero.setPadding(25, 20, 25, 20);
         hero.setBackground(new GradientDrawable(
             GradientDrawable.Orientation.LEFT_RIGHT,
             new int[]{
-                Color.rgb(35, 67, 145),
-                Color.rgb(91, 48, 150),
-                Color.rgb(35, 38, 90)
+                Color.rgb(175, 15, 40),
+                Color.rgb(70, 10, 25),
+                Color.rgb(20, 30, 55)
             }
         ));
-        
 
-        TextView welcome = text("BIENVENIDO A MAHER TV", 23, white);
-        welcome.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-        hero.addView(welcome);
-
-        TextView description = text(
-            "Todo tu entretenimiento en un solo lugar",
-            15, white
+        TextView heroTitle = text(
+            "¡ARRIBA LAS CHIVAS!", 27, white
         );
-        description.setPadding(0, 8, 0, 0);
-        hero.addView(description);
+        heroTitle.setTypeface(null, Typeface.BOLD);
+        hero.addView(heroTitle);
 
-        LinearLayout.LayoutParams heroParams =
-            new LinearLayout.LayoutParams(-1, 125);
-        heroParams.setMargins(0, 22, 0, 20);
-        root.addView(hero, heroParams);
+        TextView heroText = text(
+            "Pasión, historia y orgullo rojiblanco",
+            16, white
+        );
+        heroText.setPadding(0, 10, 0, 0);
+        hero.addView(heroText);
 
-        TextView section = text("TUS APLICACIONES", 19, white);
-        section.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-        section.setPadding(0, 8, 0, 14);
-        root.addView(section);
+        LinearLayout.LayoutParams hp =
+            new LinearLayout.LayoutParams(-1, 135);
+        hp.setMargins(0, 22, 0, 22);
+        content.addView(hero, hp);
+
+        TextView appsTitle = text(
+            "TUS APLICACIONES", 21, white
+        );
+        appsTitle.setTypeface(null, Typeface.BOLD);
+        appsTitle.setPadding(0, 5, 0, 12);
+        content.addView(appsTitle);
 
         HorizontalScrollView scroll = new HorizontalScrollView(this);
         scroll.setHorizontalScrollBarEnabled(false);
@@ -131,17 +221,35 @@ public class MainActivity extends Activity {
         appList.setOrientation(LinearLayout.HORIZONTAL);
         scroll.addView(appList);
 
-        root.addView(scroll,
-            new LinearLayout.LayoutParams(-1, 165));
+        content.addView(scroll,
+            new LinearLayout.LayoutParams(-1, 155));
+
+        loadApps();
 
         TextView footer = text(
-            "MAHER TV  •  DISFRUTA TU ENTRETENIMIENTO",
-            12, muted
+            "MAHER TV  •  UNA PASIÓN INCOMPARABLE",
+            13, muted
         );
         footer.setPadding(0, 20, 0, 0);
-        root.addView(footer);
+        content.addView(footer);
+    }
 
-        setContentView(root);
+    private void showApplications() {
+        TextView heading = text(
+            "TODAS TUS APLICACIONES", 25, white
+        );
+        heading.setTypeface(null, Typeface.BOLD);
+        heading.setPadding(0, 0, 0, 20);
+        content.addView(heading);
+
+        HorizontalScrollView scroll = new HorizontalScrollView(this);
+        scroll.setHorizontalScrollBarEnabled(false);
+
+        appList = new LinearLayout(this);
+        appList.setOrientation(LinearLayout.HORIZONTAL);
+        scroll.addView(appList);
+
+        content.addView(scroll);
         loadApps();
     }
 
@@ -183,8 +291,8 @@ public class MainActivity extends Activity {
             card.setOrientation(LinearLayout.VERTICAL);
             card.setGravity(Gravity.CENTER);
             card.setPadding(12, 12, 12, 12);
-            card.setBackground(background(
-                Color.rgb(36, 48, 86), 20
+            card.setBackground(panel(
+                Color.rgb(45, 45, 55), 18
             ));
             card.setFocusable(true);
             card.setClickable(true);
@@ -198,42 +306,37 @@ public class MainActivity extends Activity {
                 new LinearLayout.LayoutParams(65, 65));
 
             TextView label = text(
-                info.loadLabel(pm).toString(),
-                14, white
+                info.loadLabel(pm).toString(), 14, white
             );
             label.setGravity(Gravity.CENTER);
             label.setMaxLines(2);
-            label.setPadding(0, 10, 0, 0);
-
+            label.setPadding(0, 8, 0, 0);
             card.addView(label);
 
             LinearLayout.LayoutParams params =
-                new LinearLayout.LayoutParams(125, 145);
+                new LinearLayout.LayoutParams(125, 140);
             params.setMargins(0, 0, 15, 0);
             appList.addView(card, params);
 
             card.setOnFocusChangeListener((v, focused) -> {
                 v.setScaleX(focused ? 1.10f : 1f);
                 v.setScaleY(focused ? 1.10f : 1f);
-                v.setAlpha(focused ? 1f : 0.85f);
+                v.setBackground(panel(
+                    focused ? red : Color.rgb(45, 45, 55), 18
+                ));
             });
 
             card.setOnClickListener(v -> {
                 try {
                     Intent launch = new Intent(Intent.ACTION_MAIN);
-                    launch.addCategory(
-                        Intent.CATEGORY_LAUNCHER
-                    );
+                    launch.addCategory(Intent.CATEGORY_LAUNCHER);
                     launch.setClassName(pkg, activityName);
-                    launch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(launch);
                 } catch (Exception e) {
                     try {
                         Intent launch =
                             pm.getLaunchIntentForPackage(pkg);
-                        if (launch != null) {
-                            startActivity(launch);
-                        }
+                        if (launch != null) startActivity(launch);
                     } catch (Exception ignored) {}
                 }
             });
