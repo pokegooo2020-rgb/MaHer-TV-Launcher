@@ -101,7 +101,7 @@ public class MainActivity extends Activity {
                 Color.rgb(35, 38, 90)
             }
         ));
-        hero.setCornerRadius(25);
+        
 
         TextView welcome = text("BIENVENIDO A MAHER TV", 23, white);
         welcome.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
